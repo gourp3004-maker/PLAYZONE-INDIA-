@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PlayZone India - Free Online Mini Games</title>
+  <style>
+    :root {
+      --bg-dark: #0b0f19;
+      --bg-card: #131b2e;
+      --bg-card-hover: #1b2640;
+      --accent: #00f0ff;
+      --accent-secondary: #8b5cf6;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #1e293b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      line-height: 1.6;
+    }
+
+    /* Header & Navbar */
+    header {
+      background: rgba(11, 15, 25, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 1rem 5%;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .logo {
+      font-size: 1.6rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 0.5px;
+    }
+
+    .search-box {
+      flex: 1;
+      max-width: 400px;
+      position: relative;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 0.65rem 1rem;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: var(--bg-card);
+      color: var(--text-main);
+      outline: none;
+      font-size: 0.95rem;
+      transition: border-color 0.2s;
+    }
+
+    .search-box input:focus {
+      border-color: var(--accent);
+    }
+
+    /* Hero Banner */
+    .hero {
+      text-align: center;
+      padding: 3rem 5% 2rem;
+      background: radial-gradient(circle at top, #1a2442 0%, var(--bg-dark) 70%);
+    }
+
+    .hero h1 {
+      font-size: 2.3rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero p {
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto 1.5rem;
+    }
+
+    /* Category Filter Pills */
+    .categories {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      padding: 0 5% 2rem;
+    }
+
+    .cat-btn {
+      background: var(--bg-card);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      padding: 0.5rem 1.2rem;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.2s;
+    }
+
+    .cat-btn:hover, .cat-btn.active {
+      background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
+      color: #000;
+      border-color: transparent;
+    }
+
+    /* Games Grid */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 5% 4rem;
+    }
+
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .game-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: transform 0.25s, background 0.25s, box-shadow 0.25s;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .game-card:hover {
+      transform: translateY(-6px);
+      background: var(--bg-card-hover);
+      box-shadow: 0 10px 25px rgba(0, 240, 255, 0.15);
+      border-color: var(--accent);
+    }
+
+    .game-thumb {
+      height: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      position: relative;
+    }
+
+    .badge {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(0, 240, 255, 0.2);
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+    }
+
+    .game-info {
+      padding: 1.2rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .game-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+    }
+
+    .game-cat {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .play-btn {
+      width: 100%;
+      padding: 0.65rem;
+      border-radius: 10px;
+      border: none;
+      background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
+      color: #050811;
+      font-weight: 800;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .play-btn:hover {
+      opacity: 0.9;
+    }
+
+    /* Game Player Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 8, 17, 0.92);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .modal.open {
+      display: flex;
+    }
+
+    .modal-content {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      width: 100%;
+      max-width: 650px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .modal-header {
+      padding: 1rem 1.5rem;
+      background: #0f172a;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-controls button {
+      background: #1e293b;
+      color: #fff;
+      border: none;
+      padding: 0.4rem 0.8rem;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-left: 0.5rem;
+      font-weight: 600;
+    }
+
+    .modal-controls button.close-btn {
+      background: #ef4444;
+    }
+
+    .game-stage {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 360px;
+      background: #080c14;
+    }
+
+    canvas {
+      background: #000;
+      border: 2px solid var(--accent);
+      border-radius: 8px;
+      max-width: 100%;
+    }
+
+    .score-board {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 0.8rem;
+    }
+
+    /* Mobile Touch D-Pad */
+    .dpad {
+      display: grid;
+      grid-template-columns: repeat(3, 50px);
+      gap: 6px;
+      margin-top: 1rem;
+    }
+
+    .dpad button {
+      height: 45px;
+      background: #1e293b;
+      color: #fff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    .dpad button:active {
+      background: var(--accent);
+      color: #000;
+    }
+
+    /* Memory & TicTacToe Boards */
+    .board-grid {
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .cell-btn {
+      width: 75px;
+      height: 75px;
+      font-size: 2rem;
+      font-weight: bold;
+      background: #1e293b;
+      color: var(--accent);
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 1.7rem; }
+      .cell-btn { width: 65px; height: 65px; font-size: 1.6rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="logo">🎮 PlayZone India</div>
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Search free games..." />
+    </div>
+  </header>
+
+  <section class="hero">
+    <h1>Play Free Online Games Instantly</h1>
+    <p>No downloads, no sign-ups. Click any game below and start playing right in your browser on mobile or PC!</p>
+  </section>
+
+  <div class="categories" id="categoryBar">
+    <button class="cat-btn active" data-cat="All">All Games</button>
+    <button class="cat-btn" data-cat="Arcade">Arcade</button>
+    <button class="cat-btn" data-cat="Puzzle">Puzzle</button>
+    <button class="cat-btn" data-cat="Strategy">Strategy</button>
+    <button class="cat-btn" data-cat="Action">Action</button>
+  </div>
+
+  <main class="container">
+    <div class="games-grid" id="gamesGrid"></div>
+  </main>
+
+  <!-- Game Player Modal -->
+  <div class="modal" id="gameModal">
+    <div class="modal-content" id="modalBox">
+      <div class="modal-header">
+        <h3 id="modalTitle">Game Title</h3>
+        <div class="modal-controls">
+          <button onclick="restartCurrentGame()">↻ Restart</button>
+          <button onclick="toggleFullScreen()">⛶ Fullscreen</button>
+          <button class="close-btn" onclick="closeModal()">✕ Close</button>
+        </div>
+      </div>
+      <div class="game-stage" id="gameStage"></div>
+    </div>
+  </div>
+
+  <footer>
+    © 2026 PlayZone India • Free Browser Gaming Portal
+  </footer>
+
+  <script>
+    const gamesData = [
+      { id: 'snake', title: 'Neon Snake Overdrive', category: 'Arcade', icon: '🐍', playable: true },
+      { id: 'brick', title: 'Cyber Brick Breaker', category: 'Action', icon: '🧱', playable: true },
+      { id: 'memory', title: 'Emoji Memory Match', category: 'Puzzle', icon: '🧠', playable: true },
+      { id: 'tictactoe', title: 'Neon Tic-Tac-Toe AI', category: 'Strategy', icon: '❌', playable: true },
+      { id: 'racing', title: 'Mumbai Highway Rush', category: 'Action', icon: '🏎️', playable: false },
+      { id: 'chess', title: 'Royal Chess Masters', category: 'Strategy', icon: '♟️', playable: false },
+      { id: 'sudoku', title: 'Daily Brain Sudoku', category: 'Puzzle', icon: '🔢', playable: false },
+      { id: 'space', title: 'Galaxy Defender 3D', category: 'Arcade', icon: '🚀', playable: false }
+    ];
+
+    let activeCategory = 'All';
+    let currentGameId = null;
+    let gameLoopInterval = null;
+
+    const gamesGrid = document.getElementById('gamesGrid');
+    const searchInput = document.getElementById('searchInput');
+    const categoryBar = document.getElementById('categoryBar');
+
+    function renderGames() {
+      const query = searchInput.value.toLowerCase();
+      gamesGrid.innerHTML = '';
+
+      const filtered = gamesData.filter(g => {
+        const matchCat = activeCategory === 'All' || g.category === activeCategory;
+        const matchSearch = g.title.toLowerCase().includes(query);
+        return matchCat && matchSearch;
+      });
+
+      filtered.forEach(game => {
+        const card = document.createElement('div');
+        card.className = 'game-card';
+        card.onclick = () => openGame(game);
+        card.innerHTML = `
+          <div class="game-thumb">
+            <span>${game.icon}</span>
+            <span class="badge">${game.playable ? 'Play Now' : 'Demo'}</span>
+          </div>
+          <div class="game-info">
+            <div>
+              <div class="game-title">${game.title}</div>
+              <div class="game-cat">${game.category}</div>
+            </div>
+            <button class="play-btn">▶ Play Free</button>
+          </div>
+        `;
+        gamesGrid.appendChild(card);
+      });
+    }
+
+    categoryBar.addEventListener('click', (e) => {
+      if (e.target.classList.contains('cat-btn')) {
+        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        activeCategory = e.target.dataset.cat;
+        renderGames();
+      }
+    });
+
+    searchInput.addEventListener('input', renderGames);
+
+    function openGame(game) {
+      currentGameId = game.id;
+      document.getElementById('modalTitle').innerText = game.title;
+      document.getElementById('gameModal').classList.add('open');
+      loadGameEngine(game.id);
+    }
+
+    function closeModal() {
+      clearInterval(gameLoopInterval);
+      document.getElementById('gameModal').classList.remove('open');
+      document.getElementById('gameStage').innerHTML = '';
+      currentGameId = null;
+    }
+
+    function restartCurrentGame() {
+      if (currentGameId) {
+        clearInterval(gameLoopInterval);
+        loadGameEngine(currentGameId);
+      }
+    }
+
+    function toggleFullScreen() {
+      const box = document.getElementById('modalBox');
+      if (!document.fullscreenElement) {
+        box.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen();
+      }
+    }
+
+    function loadGameEngine(id) {
+      clearInterval(gameLoopInterval);
+      const stage = document.getElementById('gameStage');
+      stage.innerHTML = '';
+
+      if (id === 'snake') startSnakeGame(stage);
+      else if (id === 'brick') startBrickGame(stage);
+      else if (id === 'memory') startMemoryGame(stage);
+      else if (id === 'tictactoe') startTicTacToe(stage);
+      else {
+        stage.innerHTML = `
+          <div style="text-align:center; padding: 2rem;">
+            <div style="font-size: 4rem; margin-bottom: 1rem;">🚧</div>
+            <h3>Coming Soon to PlayZone India!</h3>
+            <p style="color:#94a3b8; margin-top:0.5rem;">Try Snake, Brick Breaker, Memory Match, or Tic-Tac-Toe right now!</p>
+          </div>
+        `;
+      }
+    }
+
+    /* 1. SNAKE GAME */
+    function startSnakeGame(stage) {
+      stage.innerHTML = `
+        <div class="score-board" id="snakeScore">Score: 0</div>
+        <canvas id="snakeCanvas" width="320" height="320"></canvas>
+        <div class="dpad">
+          <div></div><button onclick="setSnakeDir(0,-1)">▲</button><div></div>
+          <button onclick="setSnakeDir(-1,0)">◀</button><button onclick="setSnakeDir(0,1)">▼</button><button onclick="setSnakeDir(1,0)">▶</button>
+        </div>
+      `;
+      const canvas = document.getElementById('snakeCanvas');
+      const ctx = canvas.getContext('2d');
+      const box = 16;
+      let snake = [{ x: 10 * box, y: 10 * box }];
+      let dir = { x: 1, y: 0 };
+      let food = { x: Math.floor(Math.random() * 19) * box, y: Math.floor(Math.random() * 19) * box };
+      let score = 0;
+
+      window.setSnakeDir = (dx, dy) => {
+        if (dx !== -dir.x && dy !== -dir.y) dir = { x: dx, y: dy };
+      };
+
+      document.onkeydown = (e) => {
+        if (e.key === 'ArrowUp') setSnakeDir(0, -1);
+        if (e.key === 'ArrowDown') setSnakeDir(0, 1);
+        if (e.key === 'ArrowLeft') setSnakeDir(-1, 0);
+        if (e.key === 'ArrowRight') setSnakeDir(1, 0);
+      };
+
+      gameLoopInterval = setInterval(() => {
+        ctx.fillStyle = '#050811';
+        ctx.fillRect(0, 0, 320, 320);
+
+        ctx.fillStyle = '#ff0055';
+        ctx.fillRect(food.x, food.y, box, box);
+
+        for (let i = 0; i < snake.length; i++) {
+          ctx.fillStyle = i === 0 ? '#00f0ff' : '#0284c7';
+          ctx.fillRect(snake[i].x, snake[i].y, box - 1, box - 1);
+        }
+
+        let headX = snake[0].x + dir.x * box;
+        let headY = snake[0].y + dir.y * box;
+
+        if (headX < 0 || headY < 0 || headX >= 320 || headY >= 320 || snake.some(s => s.x === headX && s.y === headY)) {
+          clearInterval(gameLoopInterval);
+          document.getElementById('snakeScore').innerText = `Game Over! Final Score: ${score}`;
+          return;
+        }
+
+        if (headX === food.x && headY === food.y) {
+          score += 10;
+          document.getElementById('snakeScore').innerText = `Score: ${score}`;
+          food = { x: Math.floor(Math.random() * 19) * box, y: Math.floor(Math.random() * 19) * box };
+        } else {
+          snake.pop();
+        }
+        snake.unshift({ x: headX, y: headY });
+      }, 130);
+    }
+
+    /* 2. BRICK BREAKER */
+    function startBrickGame(stage) {
+      stage.innerHTML = `
+        <div class="score-board" id="brickScore">Score: 0</div>
+        <canvas id="brickCanvas" width="320" height="300"></canvas>
+        <div style="margin-top:10px; display:flex; gap:15px;">
+          <button style="padding:10px 25px; border-radius:8px; border:none; background:#1e293b; color:#fff; font-size:1.1rem;" onclick="movePaddle(-35)">◀ Left</button>
+          <button style="padding:10px 25px; border-radius:8px; border:none; background:#1e293b; color:#fff; font-size:1.1rem;" onclick="movePaddle(35)">Right ▶</button>
+        </div>
+      `;
+      const canvas = document.getElementById('brickCanvas');
+      const ctx = canvas.getContext('2d');
+      let x = 160, y = 250, dx = 2.5, dy = -2.5, r = 7;
+      let paddleW = 70, paddleX = 125;
+      let score = 0;
+
+      const rows = 4, cols = 5, bricks = [];
+      for (let c = 0; c < cols; c++) {
+        bricks[c] = [];
+        for (let row = 0; row < rows; row++) {
+          bricks[c][row] = { x: c * 60 + 12, y: row * 22 + 30, status: 1 };
+        }
+      }
+
+      window.movePaddle = (delta) => {
+        paddleX = Math.max(0, Math.min(320 - paddleW, paddleX + delta));
+      };
+
+      document.onkeydown = (e) => {
+        if (e.key === 'ArrowLeft') movePaddle(-25);
+        if (e.key === 'ArrowRight') movePaddle(25);
+      };
+
+      gameLoopInterval = setInterval(() => {
+        ctx.clearRect(0, 0, 320, 300);
+
+        for (let c = 0; c < cols; c++) {
+          for (let row = 0; row < rows; row++) {
+            let b = bricks[c][row];
+            if (b.status === 1) {
+              ctx.fillStyle = '#8b5cf6';
+              ctx.fillRect(b.x, b.y, 52, 14);
+              if (x > b.x && x < b.x + 52 && y > b.y && y < b.y + 14) {
+                dy = -dy;
+                b.status = 0;
+                score += 10;
+                document.getElementById('brickScore').innerText = `Score: ${score}`;
+              }
+            }
+          }
+        }
+
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fillStyle = '#00f0ff';
+        ctx.fill();
+        ctx.closePath();
+
+        ctx.fillStyle = '#f8fafc';
+        ctx.fillRect(paddleX, 285, paddleW, 10);
+
+        if (x + dx > 320 - r || x + dx < r) dx = -dx;
+        if (y + dy < r) dy = -dy;
+        else if (y + dy > 285 - r) {
+          if (x > paddleX && x < paddleX + paddleW) dy = -dy;
+          else {
+            clearInterval(gameLoopInterval);
+            document.getElementById('brickScore').innerText = `Game Over! Score: ${score}`;
+          }
+        }
+        x += dx;
+        y += dy;
+      }, 16);
+    }
+
+    /* 3. MEMORY MATCH */
+    function startMemoryGame(stage) {
+      const emojis = ['🚀', '🔥', '💎', '⚡', '🎮', '🏆', '🚀', '🔥', '💎', '⚡', '🎮', '🏆']
+        .sort(() => Math.random() - 0.5);
+      let flipped = [], matched = 0;
+
+      stage.innerHTML = `<div class="score-board" id="memStatus">Match all pairs!</div><div class="board-grid" style="grid-template-columns: repeat(4, 1fr);" id="memBoard"></div>`;
+      const board = document.getElementById('memBoard');
+
+      emojis.forEach((em, idx) => {
+        const btn = document.createElement('button');
+        btn.className = 'cell-btn';
+        btn.innerText = '?';
+        btn.onclick = () => {
+          if (flipped.length < 2 && btn.innerText === '?') {
+            btn.innerText = em;
+            flipped.push({ btn, em });
+            if (flipped.length === 2) {
+              setTimeout(() => {
+                if (flipped[0].em === flipped[1].em) {
+                  matched += 2;
+                  if (matched === emojis.length) document.getElementById('memStatus').innerText = '🎉 You Won!';
+                } else {
+                  flipped[0].btn.innerText = '?';
+                  flipped[1].btn.innerText = '?';
+                }
+                flipped = [];
+              }, 600);
+            }
+          }
+        };
+        board.appendChild(btn);
+      });
+    }
+
+    /* 4. TIC TAC TOE AI */
+    function startTicTacToe(stage) {
+      let cells = Array(9).fill('');
+      stage.innerHTML = `<div class="score-board" id="tttStatus">Your Turn (X)</div><div class="board-grid" style="grid-template-columns: repeat(3, 1fr);" id="tttBoard"></div>`;
+      const board = document.getElementById('tttBoard');
+
+      function checkWin(p) {
+        const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+        return wins.some(w => w.every(i => cells[i] === p));
+      }
+
+      function renderBoard() {
+        board.innerHTML = '';
+        cells.forEach((val, i) => {
+          const btn = document.createElement('button');
+          btn.className = 'cell-btn';
+          btn.innerText = val;
+          btn.onclick = () => {
+            if (!cells[i] && !checkWin('X') && !checkWin('O')) {
+              cells[i] = 'X';
+              if (checkWin('X')) {
+                document.getElementById('tttStatus').innerText = '🎉 You Beat AI!';
+                renderBoard();
+                return;
+              }
+              let empty = cells.map((v, idx) => v === '' ? idx : null).filter(v => v !== null);
+              if (empty.length > 0) {
+                let aiMove = empty[Math.floor(Math.random() * empty.length)];
+                cells[aiMove] = 'O';
+                if (checkWin('O')) document.getElementById('tttStatus').innerText = '🤖 AI Wins!';
+              } else {
+                document.getElementById('tttStatus').innerText = '🤝 Match Draw!';
+              }
+              renderBoard();
+            }
+          };
+          board.appendChild(btn);
+        });
+      }
+      renderBoard();
+    }
+
+    renderGames();
+  </script>
+</body>
+</html>
